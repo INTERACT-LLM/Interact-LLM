@@ -47,16 +47,27 @@ class ChatHF:
 
     def generate(self, chat: list[ChatMessage], max_new_tokens: int = 200):
         ds = datetime.today().strftime("%Y-%m-%d")
-        prompt = self.tokenizer.apply_chat_template(
+
+        formatted_prompt = self.tokenizer.apply_chat_template(
             chat, tokenize=False, add_generation_prompt=True, date_string=ds
         )
 
         # tokenized inputs and outputs
         token_inputs = self.tokenizer.encode(
-            prompt, add_special_tokens=False, return_tensors="pt"
+            formatted_prompt, add_special_tokens=False, return_tensors="pt"
         )
+
+        # Now let's control generation through a bias. Please note that the tokenizer is initialized differently!
+        tokenizer_with_prefix_space = AutoTokenizer.from_pretrained(self.model_id, add_prefix_space=True)
+
+        def get_tokens(word):
+            return tokenizer_with_prefix_space([word], add_special_tokens=False).input_ids[0]
+        sequence_bias = [[[get_tokens("rojo")[0]], 8.0, [[get_tokens("manzana")[0]], 6.0]]]
+
         token_outputs = self.model.generate(
-            input_ids=token_inputs.to(self.model.device), max_new_tokens=max_new_tokens
+            input_ids=token_inputs.to(self.model.device), max_new_tokens=max_new_tokens, 
+            num_beams=4, sequence_bias=sequence_bias,
+            repetition_penalty=4.0
         )
 
         # chat (decoded output)
