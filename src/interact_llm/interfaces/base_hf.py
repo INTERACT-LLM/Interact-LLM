@@ -62,12 +62,13 @@ class ChatHF:
 
         def get_tokens(word):
             return tokenizer_with_prefix_space([word], add_special_tokens=False).input_ids[0]
-        sequence_bias = [[[get_tokens("rojo")[0]], 8.0, [[get_tokens("manzana")[0]], 6.0]]]
+        sequence_bias = [[[get_tokens("rojo")[0]], 5.0, [[get_tokens("azul")[0]], 3.0]]]
 
         token_outputs = self.model.generate(
             input_ids=token_inputs.to(self.model.device), max_new_tokens=max_new_tokens, 
             num_beams=4, sequence_bias=sequence_bias,
-            repetition_penalty=4.0
+            repetition_penalty=10.0, 
+            do_sample=False,
         )
 
         # chat (decoded output)
