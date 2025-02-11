@@ -18,6 +18,8 @@ disable_progress_bar()
 MODEL_ID = "BSC-LT/salamandra-2b-instruct"
 CACHE_DIR = Path(__file__).parents[3] / "models"  # consider making it an argparse
 DEVICE = None # "mps" 
+WORDS = None #["pizza", "hamburguesa", "pasta"] 
+BIAS = None #[20.0, 1.0, 2.0]
 
 # classes for formatting
 class UserMessage(Markdown):
@@ -90,7 +92,7 @@ class ChatApp(App):
         """
         self.update_chat_history(ChatMessage(role="user", content=user_message))
 
-        model_response = self.model.generate(self.chat_history)
+        model_response = self.model.generate(self.chat_history, words=WORDS, bias=BIAS)
 
         # replace weird <|im_end|>
         model_response.content = model_response.content.replace("<|im_end|>", "")
