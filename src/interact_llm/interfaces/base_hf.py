@@ -101,10 +101,8 @@ class ChatHF:
             output_ids = self.model.generate(
                 input_ids=input_ids.to(self.model.device), 
                 max_new_tokens=max_new_tokens, 
-                num_beams=4, 
                 sequence_bias=self.sequence_bias,
-                repetition_penalty=10.0, 
-                do_sample=False,
+                do_sample=True,
             )
 
         else: 
