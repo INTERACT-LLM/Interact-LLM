@@ -18,8 +18,15 @@ disable_progress_bar()
 MODEL_ID = "BSC-LT/salamandra-2b-instruct"
 CACHE_DIR = Path(__file__).parents[3] / "models"  # consider making it an argparse
 DEVICE = None # "mps" 
-WORDS = ["rojo", "azul"] 
-BIAS = 7.0
+#with open(Path(__file__).parents[0] / "words" / "ropa.txt") as file: WORDS = [line.rstrip() for line in file]
+WORDS = ["rojo", "amarillo", "verde", "azul", "colores", "color", "gustar", "gusta", "gustan", "púrpura", "marrón"]
+BIAS = 5.0
+
+SYSTEM_MSG = f"""
+Eres una inteligencia artificial que ayuda a estudiantes que están aprendiendo español. Tu nombre es Salamandra.
+Es muy importante que sigas hablando en Español y tienes que hacer muchas preguntas.
+Además, tienes que intentar a utilizar estas palabras: {WORDS}
+"""
 
 # classes for formatting
 class UserMessage(Markdown):
@@ -58,7 +65,7 @@ class ChatApp(App):
 
     def __init__(self):
         super().__init__()
-        self.chat_history = ChatHistory(messages=[])
+        self.chat_history = ChatHistory(messages=[ChatMessage(role="system", content=SYSTEM_MSG)])
 
     def on_mount(self) -> None:
         self.model = ChatHF(model_id=MODEL_ID, cache_dir=CACHE_DIR, device=DEVICE)

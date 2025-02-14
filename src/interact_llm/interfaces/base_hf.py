@@ -103,6 +103,8 @@ class ChatHF:
                 max_new_tokens=max_new_tokens, 
                 sequence_bias=self.sequence_bias,
                 do_sample=True,
+                #repetition_penalty=2.0,
+                #temperature=0.2
             )
 
         else: 
