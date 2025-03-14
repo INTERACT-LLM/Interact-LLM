@@ -36,12 +36,13 @@ class ChatLlamacpp:
                 repo_id = self.model_id, 
                 filename = self.filename,
                 verbose = False,
-                n_ctx = self.context_length
+                n_ctx = self.context_length,
+                n_gpu_layers = self.n_gpu_layers
             )
 
     def format_params(self):
         if self.sampling_params:
-            # normalize "temp" to "temperature" (ensures you can pass temp to the model as this is how MLX/HF defines it)
+            # normalise "temp" to "temperature" (ensures you can pass temp to the model as this is how MLX/HF defines it)
             if "temp" in self.sampling_params:
                 self.sampling_params["temperature"] = self.sampling_params.pop("temp")
             
@@ -50,6 +51,10 @@ class ChatLlamacpp:
             kwargs = {}
 
         if self.penalty_params:
+            # normalise repetition penalty
+            if "repetition_penalty" in self.penalty_params:
+                self.penalty_params["repeat_penalty"] = self.penalty_params.pop("repetition_penalty")
+           
             kwargs.update(self.penalty_params)
 
         return kwargs
@@ -59,12 +64,15 @@ class ChatLlamacpp:
 
         # chat (decoded output)
         response = self.model.create_chat_completion(
-            messages = chat,
+            messages = [msg.model_dump() for msg in chat.messages],
             max_tokens = max_new_tokens,
             **kwargs
         )
 
+        # extract content
+        content = response["choices"][0]["message"]["content"]
+
         # formatting
-        chat_message = ChatMessage(role="assistant", content=response)
+        chat_message = ChatMessage(role="assistant", content=content)
 
         return chat_message

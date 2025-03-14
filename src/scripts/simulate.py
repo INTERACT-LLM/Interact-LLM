@@ -144,7 +144,8 @@ def main():
         
         model = ChatLlamacpp(
             model_id=model_id,
-            context_length=1000000,
+            n_gpu_layers=-1,
+            context_length=3000,
             filename=filenames[model_id],
             sampling_params=sampling_params,
             penalty_params=penality_params,
