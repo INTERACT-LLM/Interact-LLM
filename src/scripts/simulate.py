@@ -16,7 +16,7 @@ from tqdm import tqdm
 
 from interact_llm.data_models.chat import ChatHistory, ChatMessage
 from interact_llm.data_models.prompt import SystemPrompt, load_prompt_by_id
-from interact_llm.llm.mlx_wrapper import ChatMLX
+from interact_llm.llm.ollama_wrapper import ChatOllama
 from scripts.detect_lang import _detect_lang
 
 DEFAULT_PROMPT_VERSION = 3.0
@@ -50,7 +50,7 @@ def input_parse():
 
 
 def simulate_conversation(
-    model: ChatMLX, n_total_rounds: int = 9, tutor_system_prompt=SystemPrompt
+    model, n_total_rounds: int = 9, tutor_system_prompt=SystemPrompt
 ) -> ChatHistory:
     """
     Simulate an LLM conversation
@@ -136,7 +136,7 @@ def main():
         penality_params = {"repetition_penalty": 1.1}
 
         model_id = args.model_id
-        model = ChatMLX(
+        model = ChatOllama(
             model_id=model_id,
             sampling_params=sampling_params,
             penalty_params=penality_params,

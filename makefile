@@ -16,3 +16,8 @@ check-format: # for later automated formats where pre-commit fails if this check
 	@echo "[INFO:] Checking formatting ..."
 	uv run ruff format . --check						
 	uv run ruff check
+
+setup-ollama:
+	curl -L https://ollama.com/download/ollama-linux-amd64-rocm.tgz -o ollama-linux-amd64-rocm.tgz
+	sudo tar -C /usr -xzf ollama-linux-amd64-rocm.tgz
+	uv add ollama
