@@ -32,7 +32,7 @@ class ChatOllama:
         """
         Lazy-loading (loads model and tokenizer if not already loaded)
         """
-        pass
+        ollama.pull(self.model_id)
 
     def format_params(self):
         if self.sampling_params:
