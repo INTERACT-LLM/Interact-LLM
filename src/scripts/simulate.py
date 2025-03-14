@@ -5,6 +5,8 @@ Model tested currently:
 - mlx-community/Qwen2.5-7B-Instruct-1M-4bit
 - mlx-community/meta-Llama-3.1-8B-Instruct-4bit
 
+GGUF: 
+- bartowski/Qwen2.5-7B-Instruct-1M-GGUF
 """
 
 import argparse
@@ -16,7 +18,7 @@ from tqdm import tqdm
 
 from interact_llm.data_models.chat import ChatHistory, ChatMessage
 from interact_llm.data_models.prompt import SystemPrompt, load_prompt_by_id
-from interact_llm.llm.mlx_wrapper import ChatMLX
+from interact_llm.llm.llamacpp_wrapper import ChatLlamacpp
 from scripts.detect_lang import _detect_lang
 
 DEFAULT_PROMPT_VERSION = 3.0
@@ -40,7 +42,7 @@ def input_parse():
         "--model_id",
         help="model id as it is specified on hugging face",
         type=str,
-        default="mlx-community/Qwen2.5-7B-Instruct-1M-4bit",
+        default="bartowski/Qwen2.5-7B-Instruct-1M-GGUF"
     )
 
     # save arguments to be parsed from the CLI
@@ -50,7 +52,7 @@ def input_parse():
 
 
 def simulate_conversation(
-    model: ChatMLX, n_total_rounds: int = 9, tutor_system_prompt=SystemPrompt
+    model: ChatLlamacpp, n_total_rounds: int = 9, tutor_system_prompt=SystemPrompt
 ) -> ChatHistory:
     """
     Simulate an LLM conversation
@@ -118,15 +120,14 @@ def simulate_conversation(
 
     return tutor_history
 
-
 def main():
     args = input_parse()
 
-    n_runs = 10
+    n_runs = 1
 
     for n in range(n_runs):
         print(f"[INFO]: Running simulation run {n + 1} out of {n_runs}")
-        # load model with MLX
+        # load model
         sampling_params = {
             "temp": 0.8,
             "top_p": 0.95,
@@ -136,11 +137,19 @@ def main():
         penality_params = {"repetition_penalty": 1.1}
 
         model_id = args.model_id
-        model = ChatMLX(
+
+        filenames = {
+            "bartowski/Qwen2.5-7B-Instruct-1M-GGUF": "Qwen2.5-7B-Instruct-1M-Q4_1.gguf"
+        }
+        
+        model = ChatLlamacpp(
             model_id=model_id,
+            context_length=1000000,
+            filename=filenames[model_id],
             sampling_params=sampling_params,
             penalty_params=penality_params,
         )
+        
         print(f"[INFO]: Loading model {model_id} ... please wait")
         model.load()
 
