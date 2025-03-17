@@ -29,8 +29,8 @@ def get_model_id(
     if models_config_path.suffix != ".toml":
         raise ValueError(f"The file at '{models_config_path}' is not a TOML file.")
 
-    if backend not in {"mlx", "hf"}:
-        raise ValueError("Backend must be 'mlx' or 'hf'")
+    if backend not in {"mlx", "hf", "ollama"}:
+        raise ValueError("Backend must be 'mlx', 'hf' or 'ollama'")
 
     models = toml.load(models_config_path)["models"]
 

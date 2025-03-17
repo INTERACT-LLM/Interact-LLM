@@ -57,7 +57,6 @@ class ChatOllama:
         # format params
         params = self.format_params()
         params["num_predict"] = max_new_tokens
-        params["repeat_last_n"]= 0 # disabled (as it does not exist in other inference engines)
 
         # chat (decoded output)
         response = ollama.chat(model=self.model_id, 
