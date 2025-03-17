@@ -1,0 +1,11 @@
+# all models are configured as instruct versions
+
+[[models]]
+name = "qwen2.5:7b"
+mlx = "mlx-community/Qwen2.5-7B-Instruct-1M-4bit"
+hf = "Qwen/Qwen2.5-7B-Instruct" 
+
+[[models]]
+name = "llama3.1:8b"
+mlx = "mlx-community/meta-Llama-3.1-8B-Instruct-4bit"
+hf = "meta-llama/Llama-3.1-8B-Instruct"

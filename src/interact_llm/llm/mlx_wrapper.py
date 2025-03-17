@@ -5,9 +5,10 @@ MLX wrapper for running quantized mdls
 from pathlib import Path
 from typing import Optional
 
-from interact_llm.data_models.chat import ChatMessage
 from mlx_lm import generate, load
 from mlx_lm.sample_utils import make_logits_processors, make_sampler
+
+from interact_llm.data_models.chat import ChatMessage
 
 
 class ChatMLX:
@@ -47,7 +48,7 @@ class ChatMLX:
             if self.device:
                 self.model.to(self.device)
 
-    def generate(self, chat: list, max_new_tokens: int = 200):
+    def generate(self, chat: list, max_new_tokens: int = 3000):
         prompt = self.tokenizer.apply_chat_template(  # nb see https://huggingface.co/mlx-community/Qwen2.5-7B-Instruct-1M-4bit
             chat,
             tokenize=False,

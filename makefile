@@ -10,7 +10,7 @@ install:
 format: 
 	@echo "[INFO:] Formatting code with ruff ..."
 	uv run ruff format . 						           
-	ruff check --select I --fix
+	uv run ruff check --select I --fix
 
 check-format: # for later automated formats where pre-commit fails if this check fails
 	@echo "[INFO:] Checking formatting ..."
