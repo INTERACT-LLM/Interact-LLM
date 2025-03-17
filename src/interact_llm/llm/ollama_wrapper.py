@@ -53,9 +53,12 @@ class ChatOllama:
 
         return kwargs
 
-    def generate(self, chat: ChatHistory, max_new_tokens: int = 200):
-
+    def generate(self, chat: ChatHistory, max_new_tokens: int = -1):
+        # format params
         params = self.format_params()
+        params["num_predict"] = max_new_tokens
+        params["repeat_last_n"]= 0 # disabled (as it does not exist in other inference engines)
+
         # chat (decoded output)
         response = ollama.chat(model=self.model_id, 
                                messages= [msg.model_dump() for msg in chat.messages], 

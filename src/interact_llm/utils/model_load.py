@@ -9,10 +9,11 @@ import toml
 
 from interact_llm.llm.hf_wrapper import ChatHF
 from interact_llm.llm.mlx_wrapper import ChatMLX
+from interact_llm.llm.ollama_wrapper import ChatOllama
 
 
 def get_model_id(
-    models_config_path: Path, model_name: str, backend: Literal["mlx", "hf"] = "mlx"
+    models_config_path: Path, model_name: str, backend: Literal["mlx", "hf", "ollama"] = "mlx"
 ) -> str:
     """
     Reads models from a TOML file and returns the correct model ID
@@ -68,11 +69,11 @@ def login_hf_token(token_path: Path = Path(__file__).parents[3] / "tokens" / "hf
 def load_model_backend(
     models_config_path: Path,
     model_name: str,
-    backend: Literal["mlx", "hf"] = "mlx",
+    backend: Literal["mlx", "hf", "ollama"] = "mlx",
     token_path: Path = Path(__file__).parents[3] / "tokens" / "hf_token.txt",
     cache_dir: Optional[Path] = None,
     **model_kwargs,
-) -> ChatHF | ChatMLX:
+) -> ChatHF | ChatMLX | ChatOllama:
     """
     Loads a model based on the specified backend ("mlx" or "hf"). Will try to login to HF 
 
@@ -95,6 +96,8 @@ def load_model_backend(
         model = ChatMLX(model_id=model_id, **model_kwargs)
     elif backend == "hf":
         model = ChatHF(model_id=model_id, cache_dir=cache_dir, **model_kwargs)
+    elif backend == "ollama":
+        model = ChatOllama(model_id=model_id, **model_kwargs)
 
     try: 
         model.load()

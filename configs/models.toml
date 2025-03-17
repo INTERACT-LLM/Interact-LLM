@@ -4,8 +4,14 @@
 name = "qwen2.5:7b"
 mlx = "mlx-community/Qwen2.5-7B-Instruct-1M-4bit"
 hf = "Qwen/Qwen2.5-7B-Instruct" 
+ollama = "qwen2.5:7b"
 
 [[models]]
 name = "llama3.1:8b"
 mlx = "mlx-community/meta-Llama-3.1-8B-Instruct-4bit"
 hf = "meta-llama/Llama-3.1-8B-Instruct"
+ollama = "llama3.1:8b"
+
+[[models]]
+name = "gemma3:12b"
+ollama = "gemma3:12b"
