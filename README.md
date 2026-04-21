@@ -1,7 +1,7 @@
 # Interact-LLM: Inference Experiments
 This repository contains code for experiments exploring how large language models (LLMs) perform as cognitive tutors for language learning. All experiments are connected to the `INTERACT-LLM` project. See also the [Research](#-research) section.
 
->Note: The code is currently *only* intended for internal use and is not production-ready.
+>Note: The code is currently *only* intended for internal use and is not production-ready. Currently porting to gemma4-27b.
 
 🔗 [Read about the INTERACT-LLM project (in Danish)](https://cc.au.dk/aktuelt/nyheder/nyhed/artikel/forskere-fra-arts-vil-udvikle-en-chatbot-der-kan-fremme-sprogindlaering),
 
